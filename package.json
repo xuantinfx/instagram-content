@@ -10,6 +10,8 @@
   "author": "Tin",
   "license": "ISC",
   "dependencies": {
-    "puppeteer": "^5.5.0"
+    "lodash.get": "^4.4.2",
+    "puppeteer": "^5.5.0",
+    "request": "^2.88.2"
   }
 }

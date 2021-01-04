@@ -76,7 +76,7 @@ const main = async (keyWord) => {
   return result
 };
 
-main('girl').then(res => {
+main('hentai').then(res => {
   fs.writeFileSync(__dirname + "/result.json", JSON.stringify(res, null, 2));
   console.log('res', res)
 }).catch(e => {
