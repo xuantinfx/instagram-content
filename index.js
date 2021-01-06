@@ -49,34 +49,31 @@ const main = async (keyWord) => {
   await page.waitForTimeout(5000);
 
   const searchResult = await page.$$eval('.yCE8d', elements => elements.map(el => el.href));
+  const urlWillCrawl = searchResult.filter(url => /https:\/\/www.instagram.com\/.[^/]+\//.test(url));
 
-  let selectedSearchUrl = '';
+  let result = [];
 
-  while (!/https:\/\/www.instagram.com\/.[^/]+\//.test(selectedSearchUrl)) {
-    selectedSearchUrl = searchResult[Math.round(Math.random() * 100) % searchResult.length];
-  }
-
-  await page.goto(selectedSearchUrl, {
-    waitUntil: "networkidle2"
-  });
-
-  await page.waitForTimeout(5000);
-
-  for (let i = 0; i < 5; i++) {
-    await page.evaluate(_ => {
-      window.scrollBy(0, window.innerHeight * 4);
+  for (let i = 0; i < urlWillCrawl.length; i++) {
+    await page.goto(urlWillCrawl[i], {
+      waitUntil: "networkidle2"
     });
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(5000);
+    for (let i = 0; i < 10; i++) {
+      await page.evaluate(_ => {
+        window.scrollBy(0, window.innerHeight * 4);
+      });
+      await page.waitForTimeout(2000);
+    }
+    const curResult = await page.$$eval('.FFVAD', elements => elements.map(el => el.src));
+    result = result.concat(curResult);
   }
-
-  const result = await page.$$eval('.FFVAD', elements => elements.map(el => el.src));
 
   await browser.close();
 
   return result
 };
 
-main('hentai').then(res => {
+main('girl').then(res => {
   fs.writeFileSync(__dirname + "/result.json", JSON.stringify(res, null, 2));
   console.log('res', res)
 }).catch(e => {
