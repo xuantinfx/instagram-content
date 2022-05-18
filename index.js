@@ -42,29 +42,29 @@ const main = async (keyWord) => {
   await page.waitForTimeout(1000);
 
   for (let i = 0; i < keyWord.length; i++) {
-    await page.type('.XTCLo, .x3qfX', keyWord[i]);
+    await page.type('._9_uj._a4th._a4tk', keyWord[i]);
     await page.waitForTimeout(100);
   }
 
   await page.waitForTimeout(5000);
 
-  const searchResult = await page.$$eval('.yCE8d', elements => elements.map(el => el.href));
+  const searchResult = await page.$$eval('div[role="none"] a', elements => elements.map(el => el.href));
   const urlWillCrawl = searchResult.filter(url => /https:\/\/www.instagram.com\/.[^/]+\//.test(url));
 
   let result = [];
 
-  for (let i = 0; i < urlWillCrawl.length; i++) {
+  for (let i = 0; i < urlWillCrawl.length && i < 3; i++) {
     await page.goto(urlWillCrawl[i], {
       waitUntil: "networkidle2"
     });
     await page.waitForTimeout(5000);
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 2; i++) {
       await page.evaluate(_ => {
         window.scrollBy(0, window.innerHeight * 4);
       });
       await page.waitForTimeout(2000);
     }
-    const curResult = await page.$$eval('.FFVAD', elements => elements.map(el => el.src));
+    const curResult = await page.$$eval('a[role="link"] img', elements => elements.map(el => el.src));
     result = result.concat(curResult);
   }
 
